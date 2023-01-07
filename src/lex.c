@@ -713,10 +713,18 @@ static Symbol icon(unsigned long n, int overflow, int base) {
 		cp += 1;
 	} else if (overflow || n > longtype->u.sym->u.limits.max.i)
 		tval.type = unsignedlong;
+#if 1 /* 00/03/31 jan@fpgacpu.org XSOC issue #15 fix added */
+    else if (base != 10 &&
+             n > inttype->u.sym->u.limits.max.i &&
+             n <= unsignedtype->u.sym->u.limits.max.i)
+        tval.type = unsignedtype;
+#endif
 	else if (n > inttype->u.sym->u.limits.max.i)
 		tval.type = longtype;
+#if 0 /* 00/03/31 jan@fpgacpu.org XSOC issue #15 fix deleted */
 	else if (base != 10 && n > inttype->u.sym->u.limits.max.i)
 		tval.type = unsignedtype;
+#endif
 	else
 		tval.type = inttype;
 	switch (tval.type->op) {
